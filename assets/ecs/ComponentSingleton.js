@@ -7,7 +7,7 @@
 let ComponentSingleton = function (ComponentType,ecs) {
     this._component = ComponentType;            //给对象赋值
     this._instance = null;
-    this._name = ComponentType.prototype.__classname;  //名称为对象定义的原型名
+    this._name = ComponentType.defineName;  //名称为对象定义的原型名
     this._ecs = ecs;
 };
 /**
@@ -16,15 +16,11 @@ let ComponentSingleton = function (ComponentType,ecs) {
  */
 ComponentSingleton.prototype.create = function () {
     let args = [].slice.call(arguments);
-    if (args.length>0) {
-        this._instance = {};
-        this._component.prototype.constructor.apply(this._instance,args);
-        this._instance.__proto__ = this._component.prototype;
-    } else {
-        this._instance = new this._component();
-
-    }
-    if (this._instance['onCreate']) {
+    this._instance = Object.create(this._component.prototype);
+    this._component.prototype.constructor.apply(this._instance,args);
+    this._instance._dirty = true;
+    this._instance._ecs = this._ecs;
+    if (this._instance.onCreate) {
         this._instance.onCreate(this._ecs);
     }
     return this._instance;
@@ -61,7 +57,7 @@ ComponentSingleton.prototype.update = function (dt) {
 
 ComponentSingleton.prototype.destroy = function () {
     if (this._instance) {
-        this._instance.onRemove();
+        this._instance.destroy();
     }
     this._instance = null;
 };

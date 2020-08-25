@@ -1,8 +1,25 @@
 const Long = require('long');
 const Buffer = require('buffer').Buffer;
 const ObjectID = this?require('bson').ObjectId:require('./binary/objectid');
+const Component = require('./Component');
 
 let ECSUtil = {};
+
+ECSUtil.mountComponnet = function(NewComponent) {
+//TODO:这里准备更新
+    NewComponent.prototype.getComponentName = NewComponent.prototype.getComponentName||function () {
+        return this.__classname;
+    };
+    NewComponent.prototype.getECS = NewComponent.prototype.getECS||Component.prototype.getECS;
+    NewComponent.prototype.isClient = NewComponent.prototype.isClient||Component.prototype.isClient;
+    NewComponent.prototype.getRenderer = NewComponent.prototype.getRenderer||Component.prototype.getRenderer;
+    NewComponent.prototype.isRenderer = NewComponent.prototype.isRenderer||Component.prototype.isRenderer;
+    NewComponent.prototype.getEntity = NewComponent.prototype.getEntity||Component.prototype.getEntity;
+    NewComponent.prototype.getSibling = NewComponent.prototype.getSibling||Component.prototype.getSibling;
+    NewComponent.prototype.dirty = NewComponent.prototype.dirty||Component.prototype.dirty;
+    NewComponent.prototype.isDirty = NewComponent.prototype.isDirty||Component.prototype.isDirty;
+    NewComponent.prototype.clean = NewComponent.prototype.clean||Component.prototype.clean;
+};
 
 ECSUtil.remove = function (arr,func) {
     for (let i=0;i<arr.length;i++) {
@@ -59,9 +76,9 @@ ECSUtil.getComponentType = function (comp) {
         return comp;
     }
     if (comp.defineName) {
-        return comp.defineName();
+        return comp.defineName;
     }
-    if (comp.prototype) {
+    if (comp.prototype && comp.prototype.__classname) {
         return comp.prototype.__classname;
     }
     return comp.__proto__.getComponentName();
@@ -75,33 +92,6 @@ ECSUtil.clone = function (comp) {
     return ret;
 };
 
-ECSUtil.cloneFunc=function (ctor, superCtor) {
-    for (let i in superCtor.prototype) {
-        ctor.prototype[i]=superCtor.prototype[i];
-    }
-};
-
-ECSUtil.cloneObjectDeep=function (obj) {
-    if (null===obj||"object"!== typeof obj) return obj;
-
-    if (obj instanceof Date) {
-        let copy=new Date();
-        copy.setTime(obj.getTime());
-        return copy;
-    }
-    if (obj instanceof Array|obj instanceof Object) {
-        let copy=(obj instanceof Array) ? []:{};
-        for (let attr in obj) {
-            if (obj.hasOwnProperty(attr))
-                copy[attr]=ECSUtil.cloneObjectDeep(obj[attr]);
-        }
-        return copy;
-    }
-};
-
-ECSUtil.has = function (obj,key) {
-    return obj[key]!==undefined;
-};
 
 ECSUtil.includes = function (collection,value) {
     if (ECSUtil.isArray(value)) {
@@ -117,13 +107,6 @@ ECSUtil.includes = function (collection,value) {
         return collection.includes(value);
     }
     return true;
-};
-
-ECSUtil.inherits=function (ctor, superCtor) {
-    ctor._super = superCtor.prototype;
-    for (let i in superCtor.prototype) {
-        ctor.prototype[i]=superCtor.prototype[i];
-    }
 };
 
 ECSUtil.isObject=function (val) {
@@ -155,20 +138,23 @@ ECSUtil.isString=function (arg) {
 };
 
 ECSUtil.isStringNumber = function(arg) {
+    if (!(typeof arg=== 'string'||typeof arg=== 'number')) {
+        return false;
+    }
     let regPos = /^\d+(\.\d+)?$/; //非负浮点数
     let regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
     return regPos.test(arg) || regNeg.test(arg);
 };
 
 ECSUtil.isLongString = function (arg) {
-    if (!ECSUtil.isStringNumber(arg)) {
+    if (!ECSUtil.isStringNumber(arg)||typeof arg!=='string') {
         return false;
     }
-    return Long.fromString(arg).toString() === arg;
+    return Long.fromString(''+arg).toString() === arg;
 };
 
 ECSUtil.isFloat = function (arg) {
-    return  ECSUtil.isNumber(arg)&&arg%1 === 0;
+    return  ECSUtil.isNumber(arg)&&!ECSUtil.isInteger(arg);
 };
 
 ECSUtil.isByte = function (arg) {
@@ -200,11 +186,15 @@ ECSUtil.isFloat = function (arg) {
 };
 
 ECSUtil.isDouble = function (arg) {
-    return !ECSUtil.isInteger(arg)&&(!isNaN(arg));
+    return  ECSUtil.isNumber(arg)&&!ECSUtil.isInteger(arg)&&(!isNaN(arg));
 };
 
 ECSUtil.isBoolean = function (arg) {
     return typeof arg === 'boolean';
+};
+
+ECSUtil.isInheritFrom = function (A,B) {
+    return A.prototype.__proto__.constructor === B;
 };
 
 ECSUtil.isGZip=function (buf) {

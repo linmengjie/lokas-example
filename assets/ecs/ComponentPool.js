@@ -5,29 +5,28 @@
  * @param minSize
  * @constructor
  */
-let ComponentPool = function (ComponentType,maxSize,minSize,ecs) {
-    this._component = ComponentType;            //给对象赋值
-    this._name = ComponentType.prototype.__classname;  //名称为对象定义的原型名
-    this._pool = [];
-    this._itemCount=0;
-    this._maxSize = maxSize;
-    this._minSize = minSize;
-    this._ecs = ecs;
-};
+class ComponentPool {
+    constructor(ComponentType,maxSize,minSize,ecs){
+        this._component = ComponentType;            //给对象赋值
+        this._name = ComponentType.prototype.__classname;  //名称为对象定义的原型名
+        this._pool = [];
+        this._itemCount=0;
+        this._maxSize = maxSize;
+        this._minSize = minSize;
+        this._ecs = ecs;
+    }
+}
 /**
  * 创建一个组件<Component>并尝试调用它的onCreate方法
  * @returns Component
  */
 ComponentPool.prototype.create = function () {
     let args = [].slice.call(arguments);
-    let ret;
-    if (args.length>0) {
-        ret = Object.create(this._component.prototype);
-        this._component.prototype.constructor.apply(ret,args);
-    } else {
-        ret = new this._component();
-    }
-    if (ret['onCreate']) {
+    let ret = Object.create(this._component.prototype);
+    ret._ecs = this._ecs;
+    this._component.prototype.constructor.apply(ret,args);
+    ret._dirty = true;
+    if (ret.onCreate) {
         ret.onCreate(this._ecs);
     }
     this._itemCount++;
@@ -38,7 +37,7 @@ ComponentPool.prototype.create = function () {
  */
 ComponentPool.prototype.popAndDestroy=function() {
     let comp = this._pool.pop();
-    if (comp['onDestroy']) {
+    if (comp.onDestroy) {
         comp.onDestroy(this._ecs);
     }
     this._itemCount--;
@@ -66,6 +65,7 @@ ComponentPool.prototype.get = function () {
         }
     } else {
         let ret = this._pool.pop();
+        ret._dirty = true;
         if (args.length>0) {
             ret.__proto__.constructor.apply(ret,args);
         }

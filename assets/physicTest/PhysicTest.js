@@ -13,12 +13,12 @@ let width = 800;
 let height = 800;
 
 class PhysicWorld extends Component{
-    static defineName(){
+    static get defineName(){
         return 'PhysicWorld'
     }
     constructor(){
         super();
-        this.quadTree = new QuadTree(0,0,width,height);
+        this.quadTree = new QuadTree(0, 0, width, height);
         this.bvTree = new BVTree();
         this.quad = false;
     }
@@ -47,13 +47,16 @@ class PhysicWorld extends Component{
         if (this.quad) {
             this.quadTree.draw(context);
         } else {
+            console.log("=====1");
             this.bvTree.draw(context);
+            //this.bvTree.draw(context, 1, 1);
+            console.log("=====2");
         }
     }
 }
 
 class Canvas extends Component{
-    static defineName(){
+    static get defineName(){
         return 'Canvas';
     }
     constructor(){
@@ -93,6 +96,7 @@ class Canvas extends Component{
 module.exports = {
     name:'PhysicTest',
     onLoad:function (ecs) {
+        console.log("开始初始化ECS");
         ecs.registerComponent(Circle);
         ecs.registerComponent(Polygon);
         ecs.registerComponent(Collider);
@@ -175,8 +179,8 @@ module.exports = {
                 let cCircle = ent.get('Circle');
                 let cCanvas = ecs.getSingleton('Canvas');
                 let context = cCanvas.getContext(Dice.rngInt(0,6));
-                cPolygon&&cPolygon.draw(context);
-                cCircle&&cCircle.draw(context);
+                cPolygon && cPolygon.draw(context);
+                cCircle && cCircle.draw(context);
             },
             afterUpdate:function (dt,now,ecs) {
                 let cCanvas = ecs.getSingleton('Canvas');
