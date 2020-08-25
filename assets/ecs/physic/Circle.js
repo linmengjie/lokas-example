@@ -33,4 +33,4 @@ class Circle extends Component {
     }
 }
 
-exports.Circle = Circle;
+module.exports = Circle;

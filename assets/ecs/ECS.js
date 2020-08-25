@@ -934,8 +934,6 @@ pro.registerComponent=function (name, Component, maxSize, minSize) {
     if (!name) {
         log.error('名称或组件不存在');
     }
-    // 调试组件
-    log.info(name);
     if (typeof name!=='string') {
         minSize=maxSize;
         maxSize=Component;
@@ -1745,7 +1743,7 @@ pro.start=function () {
         } else {
             this._timer.start();
         }
-        log.error('ecs start');
+        log.info('ecs start');
     } else {
         this.resume();
     }

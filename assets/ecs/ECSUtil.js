@@ -193,8 +193,13 @@ ECSUtil.isBoolean = function (arg) {
     return typeof arg === 'boolean';
 };
 
+/**
+ * 判断对象是否继承
+ * @param {system} A 可能是Function,可能是Object,可能是继承B
+ * @param {System} B 
+ */
 ECSUtil.isInheritFrom = function (A,B) {
-    return A.prototype.__proto__.constructor === B;
+    return (A.__proto__ || A.prototype.__proto__)[constructor] === B;
 };
 
 ECSUtil.isGZip=function (buf) {

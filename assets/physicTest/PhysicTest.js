@@ -6,7 +6,7 @@ const BVTree = require('BVTree');
 const QuadTree = require('QuadTree');
 const Component = require('Component');
 const {MovingSystem} = require('MovingSystem');
-const {Position,Velocity,Accelation} = require("BaseComponents");
+const {Position,Velocity,Acceleration} = require("BaseComponents");
 const Dice = require('Dice');
 
 let width = 800;
@@ -104,7 +104,7 @@ module.exports = {
         ecs.registerSingleton(PhysicWorld);
         ecs.registerComponent(Position);
         ecs.registerComponent(Velocity);
-        ecs.registerComponent(Accelation);
+        ecs.registerComponent(Acceleration);
         ecs.registerSystem(MovingSystem);
         ecs.registerSystem({
             name:'updating',
