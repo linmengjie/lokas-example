@@ -1453,6 +1453,7 @@ pro.registerSystem=function (system) {
         return;
     }
 
+    // 为什么注释掉注册分组了？
     // sys.groups = this.registerGroups(sys.components);
 
     sys.onRegister&&sys.onRegister(this);
