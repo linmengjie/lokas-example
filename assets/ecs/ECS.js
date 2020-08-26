@@ -1762,4 +1762,8 @@ pro.resume = function () {
     }
 };
 
+pro.isPaused = function () {
+    return this._paused;
+}
+
 module.exports=ECS;

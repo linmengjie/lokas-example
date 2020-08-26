@@ -5,7 +5,6 @@ const Contact = require('Contact');
 const BVTree = require('BVTree');
 const QuadTree = require('QuadTree');
 const Component = require('Component');
-const {MovingSystem} = require('MovingSystem');
 const {Position,Velocity,Acceleration} = require("BaseComponents");
 const Dice = require('Dice');
 const { Angle } = require('../ecs/physic/BaseComponents');
@@ -67,7 +66,7 @@ class Canvas extends Component{
         this.nodes = [];
     }
     onAdd(){
-        for (let i=0;i<this.size;i++) {
+        for (let i=0; i<this.size; i++) {
             let node = new cc.Node();
             let context = node.addComponent(cc.Graphics);
             cc.find('Canvas').addChild(node);
@@ -106,13 +105,19 @@ module.exports = {
         ecs.registerComponent(Angle);
         ecs.registerComponent(Velocity);
         ecs.registerComponent(Acceleration);
+        // MovingSystem的写法有问题，需要重写
         //ecs.registerSystem(MovingSystem);
         // 自定义移动系统-- start
         ecs.registerSystem({
             name:'AccelSubSystem',
             components:[Polygon],
             update:function (dt,now,ecs) {
-                let ents = this.getEntities(Polygon);
+                // let ents = this.getEntities([Polygon]);
+                // console.log(ents);
+                // let ents2 = this.getEntities([Position]);
+                // console.log(ents2);
+                // let ents3 = this.getEntities([Circle,Polygon]);
+                // console.log(ents3);
                 //console.log(ents);
                 // for (let ent in this.getEntities(this.name)) {
                 //     let vel = ent.get(Velocity);
@@ -195,22 +200,41 @@ module.exports = {
         // 渲染系统
         // ecs.registerSystem({
         //     name:'shapeRenderer',
-        //     components:[[Circle,Polygon]],
+        //     //components:[[Circle,Polygon]],
+        //     components:[Polygon],
         //     beforeUpdate:function (dt,now,ecs) {
-        //         if (this.getSize()<1200) {
-        //             ecs.spawnEntity('Circle',Dice.rng(-300,300),Dice.rng(-300,300),Dice.rng(3,8),1);
-        //             ecs.spawnEntity('Polygon',Dice.rng(-300,300),Dice.rng(-300,300),[[-4, -4], [4, -4], [4, 4], [-4, 4]],Dice.rng(0,3),1);
-        //         }
+        //         // 暂不自动添加
+        //         // if (this.getSize()<1200) {
+        //         //     ecs.spawnEntity('Circle',Dice.rng(-300,300),Dice.rng(-300,300),Dice.rng(3,8),1);
+        //         //     ecs.spawnEntity('Polygon',Dice.rng(-300,300),Dice.rng(-300,300),[[-4, -4], [4, -4], [4, 4], [-4, 4]],Dice.rng(0,3),1);
+        //         // }
+        //         console.log("会调用清理吗？");
         //         let cCanvas = ecs.getSingleton('Canvas');
         //         cCanvas.clear();
         //     },
-        //     update:(ent,dt,now,ecs) => {
-        //         let cPolygon = ent.get('Polygon');
-        //         let cCircle = ent.get('Circle');
-        //         let cCanvas = ecs.getSingleton('Canvas');
-        //         let context = cCanvas.getContext(Dice.rngInt(0,6));
-        //         cPolygon && cPolygon.draw(context);
-        //         cCircle && cCircle.draw(context);
+        //     update:function(dt,now,ecs) {
+        //         // 取所有实体遍历 TODO 
+        //         //可以尝试System:getEntities("Comp1","Comp2")获取ent对象
+        //         let ents = this.getEntities(Circle);
+        //         //let ents = System:getEntities("Polygon");
+        //         // console.log("2", this);
+        //         // return;
+        //         ents.forEach(ent => {
+        //             let cPolygon = ent.get('Polygon');
+        //             let cCircle = ent.get('Circle');
+        //             let cCanvas = ecs.getSingleton('Canvas');
+        //             let context = cCanvas.getContext(Dice.rngInt(0,6));
+        //             console.log(context);
+        //             //console,moveTo(0, 0);
+        //             context.lineTo(10, 100);
+        //             context.fill();
+        //             ecs.pause();
+        //             return;
+        //             cPolygon && cPolygon.draw(context);
+        //             cCircle && cCircle.draw(context);    
+        //             console.log("deal polygon draw", cPolygon);
+        //             console.log("deal Circle draw", cCircle);
+        //         });
         //     },
         //     afterUpdate:function (dt,now,ecs) {
         //         let cCanvas = ecs.getSingleton('Canvas');
@@ -221,14 +245,14 @@ module.exports = {
         //     }
         // });
 
-        ecs.setSpawner('Polygon',function (ecs,points,rotation,scaleX,scaleY) {
-            let ent = ecs.createEntity();
-            ent.add(Polygon,points,rotation,scaleX,scaleY);
-            ent.add(Collider);
-            ecs.getSingleton(PhysicWorld).insert(ent);
-            return ent;
-        });
-        ecs.setSpawner('Polygon1',function (ecs,points) {
+        // ecs.setSpawner('Polygon',function (ecs,points,rotation,scaleX,scaleY) {
+        //     let ent = ecs.createEntity();
+        //     ent.add(Polygon,points,rotation,scaleX,scaleY);
+        //     ent.add(Collider);
+        //     ecs.getSingleton(PhysicWorld).insert(ent);
+        //     return ent;
+        // });
+        ecs.setSpawner('Polygon',function (ecs,points) {
             let ent = ecs.createEntity();
             // polygon依赖于'Position','Angle'
             ent.add(Position);
@@ -242,6 +266,7 @@ module.exports = {
 
         ecs.setSpawner('Circle',function (ecs,x,y,radius,scale) {
             let ent = ecs.createEntity();
+            ent.add(Position);
             ent.add(Circle,x,y,radius,scale);
             ent.add(Collider);
             let speed = ent.add(Velocity,1,1);
@@ -251,10 +276,12 @@ module.exports = {
             return ent;
         });
         // 生成Entity,使用上面的SetSpawner逻辑流程来创建
-        ecs.spawnEntity('Polygon1', [[0, 0], [width, 0]]);
-        ecs.spawnEntity('Polygon1', [[width, 0], [width, height]]);
-        ecs.spawnEntity('Polygon1', [[width, height], [0, height]]);
-        ecs.spawnEntity('Polygon1', [[0, height], [0, 0]]);
+        ecs.spawnEntity('Polygon', [[0, 0], [width, 0]]);
+        ecs.spawnEntity('Polygon', [[width, 0], [width, height]]);
+        ecs.spawnEntity('Polygon', [[width, height], [0, height]]);
+        ecs.spawnEntity('Polygon', [[0, height], [0, 0]]);
+        // 画一个圆圆
+        ecs.spawnEntity('Circle', 50);
 
         console.log(cc.macro.BATCH_VERTEX_COUNT);
     }
