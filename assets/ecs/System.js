@@ -13,6 +13,10 @@ class System {
             this.updateTime = opt.updateTime||opt.interval;
             this.priority = opt.priority||0;
             this.update = opt.update||this.update;
+            // 新增before和after相关update
+            this.beforeUpdate = opt.beforeUpdate;
+            this.afterUpdate = opt.afterUpdate;
+            //
             this.lateUpdate = opt.lateUpdate||this.lateUpdate;
             this.onRegister = opt.onRegister||this.onRegister;
             this.stateOnly = opt.stateOnly||'';
@@ -129,7 +133,12 @@ class System {
             }
         }
         ecs.updateCommands();
+        // before
+        this.beforeUpdate&&this.beforeUpdate(dt, now, this._ecs);
+        // update
         this.update(dt, now, this._ecs);
+        // after
+        this.afterUpdate&&this.afterUpdate(dt, now, this._ecs);
     }
 
     doLateUpdates(dt,now,ecs) {

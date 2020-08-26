@@ -198,52 +198,50 @@ module.exports = {
         // });
 
         // 渲染系统
-        // ecs.registerSystem({
-        //     name:'shapeRenderer',
-        //     //components:[[Circle,Polygon]],
-        //     components:[Polygon],
-        //     beforeUpdate:function (dt,now,ecs) {
-        //         // 暂不自动添加
-        //         // if (this.getSize()<1200) {
-        //         //     ecs.spawnEntity('Circle',Dice.rng(-300,300),Dice.rng(-300,300),Dice.rng(3,8),1);
-        //         //     ecs.spawnEntity('Polygon',Dice.rng(-300,300),Dice.rng(-300,300),[[-4, -4], [4, -4], [4, 4], [-4, 4]],Dice.rng(0,3),1);
-        //         // }
-        //         console.log("会调用清理吗？");
-        //         let cCanvas = ecs.getSingleton('Canvas');
-        //         cCanvas.clear();
-        //     },
-        //     update:function(dt,now,ecs) {
-        //         // 取所有实体遍历 TODO 
-        //         //可以尝试System:getEntities("Comp1","Comp2")获取ent对象
-        //         let ents = this.getEntities(Circle);
-        //         //let ents = System:getEntities("Polygon");
-        //         // console.log("2", this);
-        //         // return;
-        //         ents.forEach(ent => {
-        //             let cPolygon = ent.get('Polygon');
-        //             let cCircle = ent.get('Circle');
-        //             let cCanvas = ecs.getSingleton('Canvas');
-        //             let context = cCanvas.getContext(Dice.rngInt(0,6));
-        //             console.log(context);
-        //             //console,moveTo(0, 0);
-        //             context.lineTo(10, 100);
-        //             context.fill();
-        //             ecs.pause();
-        //             return;
-        //             cPolygon && cPolygon.draw(context);
-        //             cCircle && cCircle.draw(context);    
-        //             console.log("deal polygon draw", cPolygon);
-        //             console.log("deal Circle draw", cCircle);
-        //         });
-        //     },
-        //     afterUpdate:function (dt,now,ecs) {
-        //         let cCanvas = ecs.getSingleton('Canvas');
-        //         for (let i=0;i<7;i++) {
-        //             cCanvas.getContext(i).strokeColor = cc.Color.BLUE;
-        //             cCanvas.getContext(i).stroke();
-        //         }
-        //     }
-        // });
+        ecs.registerSystem({
+            name:'shapeRenderer',
+            //components:[[Circle,Polygon]],
+            components:[Polygon],
+            beforeUpdate:function (dt,now,ecs) {
+                // let ents = [];
+                // ents.concat(this.getEntities(Polygon));
+                // ents.concat(this.getEntities(Circle));
+                let size = this.getEntities(Circle).length;
+                // 暂不自动添加
+                if (size<7) {
+                    console.log(size);
+                    ecs.spawnEntity('Circle', Dice.rng(3,50));
+                    //ecs.spawnEntity('Circle',Dice.rng(-300,300),Dice.rng(-300,300),Dice.rng(3,8),1);
+                    // ecs.spawnEntity('Polygon',Dice.rng(-300,300),Dice.rng(-300,300),[[-4, -4], [4, -4], [4, 4], [-4, 4]],Dice.rng(0,3),1);
+                } 
+                let cCanvas = ecs.getSingleton('Canvas');
+                cCanvas.clear();
+            },
+            update:function(dt,now,ecs) {
+                // 可以尝试System:getEntities("Comp1","Comp2")获取ent对象
+                // let ents = [];
+                // ents.concat(this.getEntities(Polygon));
+                // ents.concat(this.getEntities(Circle));
+                let ents = this.getEntities(Circle);
+                //
+                ents.forEach(ent => {
+                    let cPolygon = ent.get('Polygon');
+                    let cCircle = ent.get('Circle');
+                    let cCanvas = ecs.getSingleton('Canvas');
+                    let context = cCanvas.getContext(Dice.rngInt(0,6));
+                    //
+                    cPolygon && cPolygon.draw(context);
+                    cCircle && cCircle.draw(context);    
+                });
+            },
+            afterUpdate:function (dt,now,ecs) {
+                let cCanvas = ecs.getSingleton('Canvas');
+                for (let i=0;i<7;i++) {
+                    cCanvas.getContext(i).strokeColor = cc.Color.BLUE;
+                    cCanvas.getContext(i).stroke();
+                }
+            }
+        });
 
         // ecs.setSpawner('Polygon',function (ecs,points,rotation,scaleX,scaleY) {
         //     let ent = ecs.createEntity();
@@ -276,12 +274,12 @@ module.exports = {
             return ent;
         });
         // 生成Entity,使用上面的SetSpawner逻辑流程来创建
-        ecs.spawnEntity('Polygon', [[0, 0], [width, 0]]);
-        ecs.spawnEntity('Polygon', [[width, 0], [width, height]]);
-        ecs.spawnEntity('Polygon', [[width, height], [0, height]]);
-        ecs.spawnEntity('Polygon', [[0, height], [0, 0]]);
-        // 画一个圆圆
-        ecs.spawnEntity('Circle', 50);
+        // ecs.spawnEntity('Polygon', [[0, 0], [width, 0]]);
+        // ecs.spawnEntity('Polygon', [[width, 0], [width, height]]);
+        // ecs.spawnEntity('Polygon', [[width, height], [0, height]]);
+        // ecs.spawnEntity('Polygon', [[0, height], [0, 0]]);
+        // // 画一个圆圆
+        // ecs.spawnEntity('Circle', 50);
 
         console.log(cc.macro.BATCH_VERTEX_COUNT);
     }

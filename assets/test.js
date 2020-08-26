@@ -13,20 +13,22 @@ cc.Class({
 
     onLoad: function () {
         // 创建ecs的世界world,所有的update都在world里执行
-        // _world = new ECS(1000 / 30, 1, {server: true});
-        // // 加载模块
-        // _world.loadModule(PhysicTest);
-        // // 开始
-        // _world.start();
-
-        let g = this.node.addComponent(cc.Graphics);
-        g.lineWidth = 10;
-        g.lineTo(100, 200);
-        //g.close();
-        g.fill();
-        g.stroke();
-        //
-        console.log(g);
+        _world = new ECS(1000 / 30, 1, {server: true});
+        // 加载模块
+        _world.loadModule(PhysicTest);
+        // 开始
+        _world.start();
+        //.node.addComponent(cc.Graphics)
+        // let node = this.node.getChildByName('drawNode');
+        //console.log(node);
+        // let g = this.node.addComponent(cc.Graphics);
+        // g.strokeColor = cc.color(255,255,255);
+        // g.lineWidth = 10;
+        // g.moveTo(0,0);
+        // g.lineTo(100, 200);
+        // g.stroke();
+        // //
+        // console.log(g);
 
 
         //
