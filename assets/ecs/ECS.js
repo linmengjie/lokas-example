@@ -1306,6 +1306,7 @@ pro.recycleComponent=function (comp) {
 };
 
 /**
+ * // 传数组时，取的是或
  * 获得几个集合<Group>的hash值
  * @param compGroup
  * @returns {[string]}
@@ -1314,26 +1315,32 @@ pro.hashGroups=function (compGroup) {
     if (!ECSUtil.isArray(compGroup)) {
         compGroup=[compGroup];
     }
+    // 返回二维数组
     let retArr = [[]];
     for (let i=0; i<compGroup.length; i++) {
         let comp = compGroup[i];
+        // 嵌套数组的情况[aa, [bb,xx]]
         if (ECSUtil.isArray(comp)) {
             let tempArr = [];
             for (let j=0;j<comp.length;j++) {
                 for (let k=0;k<retArr.length;k++) {
+                    // 同时用aa,bb组件的
                     let arr = retArr[k].slice();
                     arr.push(ECSUtil.getComponentType(comp[j]));
                     tempArr.push(arr);
                 }
             }
             retArr = [];
+            // 结果 aa&bb, aa&xx
             retArr = tempArr;
-        } else {
+        } else { 
+            // 非数组嵌套的情况，返回的是单独组件的分组，类似[Circle]或Polygon
             for (let j=0;j<retArr.length;j++) {
                 retArr[j].push(ECSUtil.getComponentType(comp));
             }
         }
     }
+    // 排序后返回
     for (let i=0;i<retArr.length;i++) {
         retArr[i].sort();
     }
@@ -1356,6 +1363,7 @@ pro.registerGroups=function (compGroups) {
     if (!compGroups||compGroups.length===0) {
         return [];
     }
+    // 取所有分组hash,有点不好理解，这里是计算分组名称hash
     let hashes=this.hashGroups(compGroups);
     //获取注册相关的集合<Group>,如果有就作为updater方法的参数,没有就创建一个
     let groups = [];
@@ -1363,6 +1371,7 @@ pro.registerGroups=function (compGroups) {
         let hash = hashes[i];
         let group=this._groups[hash];
         if (!group) {
+            // 构建分组
             group=new Group(hash,this);
             group._hash = hash;
             this._groups[hash]=group;
@@ -1378,6 +1387,7 @@ pro.registerGroups=function (compGroups) {
                 //     continue;
                 // }
                 let ent = this._entityPool[i];
+                // 分组里add的时候做了过滤，只有实体包含所有组件才加入成功
                 group.addEntity(ent);
             }
             for (let i in this._newEntities) {

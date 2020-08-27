@@ -17,6 +17,9 @@ class BVBranch extends Rect{
     }
 }
 
+/**
+ * 二叉树
+ */
 class BVTree extends Component{
     static get defineName(){
         return 'BVTree';
@@ -341,7 +344,6 @@ class BVTree extends Component{
     }
     draw(context,scale_x,scale_y){
         this.traverse(function (branch) {
-
             scale_x = scale_x||1;
             scale_y = scale_y||scale_x||1;
             const min_x  = branch.minX*scale_x;

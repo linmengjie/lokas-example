@@ -598,6 +598,7 @@ Entity.prototype.add = function (comp) {
         comp.__proto__.constructor.apply(comp, args);
     }
     if (!isExist) {
+        // 问题：如果标识是Renderer有什么不一样吗？
         if (comp.isRenderer()) {
             if (comp.onAdd) {
                 this._ecs.lateAdd(comp);

@@ -16,6 +16,10 @@ class System {
             // 新增before和after相关update
             this.beforeUpdate = opt.beforeUpdate;
             this.afterUpdate = opt.afterUpdate;
+            // 新增updateEntity，根据配置的组件匹配实体遍历
+            this.updateEntity = opt.updateEntity;
+            // 关注的组件，查询条件用
+            this.components = opt.components;
             //
             this.lateUpdate = opt.lateUpdate||this.lateUpdate;
             this.onRegister = opt.onRegister||this.onRegister;
@@ -137,6 +141,12 @@ class System {
         this.beforeUpdate&&this.beforeUpdate(dt, now, this._ecs);
         // update
         this.update(dt, now, this._ecs);
+        // TODO update entity 方便手动查询实体
+        if (this.updateEntity && this.components) {
+            this.getEntities(this.components).forEach(ent => {
+                this.updateEntity(ent, dt, now, this._ecs);
+            });
+        }
         // after
         this.afterUpdate&&this.afterUpdate(dt, now, this._ecs);
     }

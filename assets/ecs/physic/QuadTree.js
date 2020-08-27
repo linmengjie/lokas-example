@@ -2,6 +2,9 @@ const Rect = require('./Rect');
 const Entity = require('../Entity');
 const Component = require('../Component');
 
+/**
+ * 四叉树
+ */
 class QuadTree extends Rect{
     static get defineName(){
         return 'QuadTree';

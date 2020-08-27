@@ -18,30 +18,6 @@ cc.Class({
         _world.loadModule(PhysicTest);
         // 开始
         _world.start();
-        //.node.addComponent(cc.Graphics)
-        // let node = this.node.getChildByName('drawNode');
-        //console.log(node);
-        // let g = this.node.addComponent(cc.Graphics);
-        // g.strokeColor = cc.color(255,255,255);
-        // g.lineWidth = 10;
-        // g.moveTo(0,0);
-        // g.lineTo(100, 200);
-        // g.stroke();
-        // //
-        // console.log(g);
-
-
-        //
-        // let cCanvas = _world.getSingleton('Canvas');
-        // let context = cCanvas.getContext(0);
-        // context.moveTo(100,100);
-        // context.lineTo(100, 200);
-        // context.close();
-        // context.stroke();
-        // context.fill();
-
-
-        
         //pause
         //resume
         // cc.game.on(cc.game.EVENT_SHOW, function () {
@@ -51,6 +27,16 @@ cc.Class({
         // cc.game.on(cc.game.EVENT_HIDE, function () {
         //     _world.pause();
         // });
+
+        // 测试用例
+        console.log("测试用例------");
+        console.log(_world.hashGroups('Polygon'));
+        console.log(_world.hashGroups(['Polygon', 'Circle']));
+        console.log(_world.hashGroups([['Circle','Polygon']]));
+        console.log(_world.hashGroups(['Position', ['Polygon', 'Circle']]));
+        console.log(_world.hashGroups(['Position', 'Angle', ['Polygon', 'Circle']]));
+        console.log(_world.hashGroups(['Collider',['Circle','Polygon'],'Velocity']));
+        console.log("测试用例------");
     },
 
     start: function () {
