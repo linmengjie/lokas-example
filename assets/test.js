@@ -19,24 +19,33 @@ cc.Class({
         // 开始
         _world.start();
         //pause
+        let pauseFunc = cc.game.pause.bind(cc.game);
+        cc.game.pause=()=>{
+            pauseFunc();
+            //do something
+            //cc.log("game pause");
+            _world.pause();
+        }
         //resume
-        // cc.game.on(cc.game.EVENT_SHOW, function () {
-        //     _world.resume();
-        // });
-
-        // cc.game.on(cc.game.EVENT_HIDE, function () {
-        //     _world.pause();
-        // });
+        let resumeFunc = cc.game.resume.bind(cc.game);
+        cc.game.resume=()=>{
+            resumeFunc();
+            //do something
+            // cc.log("game resume");
+            _world.resume();
+        }
+        // step实现，方便步进调试
+        
 
         // 测试用例
-        console.log("测试用例------");
-        console.log(_world.hashGroups('Polygon'));
-        console.log(_world.hashGroups(['Polygon', 'Circle']));
-        console.log(_world.hashGroups([['Circle','Polygon']]));
-        console.log(_world.hashGroups(['Position', ['Polygon', 'Circle']]));
-        console.log(_world.hashGroups(['Position', 'Angle', ['Polygon', 'Circle']]));
-        console.log(_world.hashGroups(['Collider',['Circle','Polygon'],'Velocity']));
-        console.log("测试用例------");
+        // console.log("测试用例------");
+        // console.log(_world.hashGroups('Polygon'));
+        // console.log(_world.hashGroups(['Polygon', 'Circle']));
+        // console.log(_world.hashGroups([['Circle','Polygon']]));
+        // console.log(_world.hashGroups(['Position', ['Polygon', 'Circle']]));
+        // console.log(_world.hashGroups(['Position', 'Angle', ['Polygon', 'Circle']]));
+        // console.log(_world.hashGroups(['Collider',['Circle','Polygon'],'Velocity']));
+        // console.log("测试用例------");
     },
 
     start: function () {

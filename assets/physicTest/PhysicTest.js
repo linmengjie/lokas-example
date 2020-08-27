@@ -250,7 +250,7 @@ module.exports = {
         //ecs.spawnEntity('Circle', 0, 0, 50);
 
         // 随机画N个圆和多边形
-        let size = 10;
+        let size = 100;
         for (let index = 0; index < size; index++) {
             ecs.spawnEntity('Circle',Dice.rng(-300,300),Dice.rng(-300,300),Dice.rng(3,8),1);
             ecs.spawnEntity('Polygon',Dice.rng(-300,300),Dice.rng(-300,300),[[-4, -4], [4, -4], [4, 4], [-4, 4]],Dice.rng(0,3),1);
