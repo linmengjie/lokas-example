@@ -1,18 +1,12 @@
 module.exports = ({
   bmp: {
-    file: [
+    files: [
       {
-        "file(0-69)": "sprite/bandit_0.png", w: 79, h: 79, row: 10, col: 7
+        "file": "sprite/bandit_0.png", w: 79, h: 79, row: 10, col: 7, start: 0, end: 69
       },
-      {
-        "file(70-139)": "sprite/bandit_1.png", w: 79, h: 79, row: 10, col: 7
-      }/*,
-      {
-        "file(140-209)": "sprite/bandit_0b.png", w: 79, h: 79, row: 10, col: 7
-      },
-      {
-        "file(210-279)": "sprite/bandit_1b.png", w: 79, h: 79, row: 10, col: 7
-      }*/
+      // {
+      //   "file": "sprite/bandit_1.png", w: 79, h: 79, row: 10, col: 7, start: 70, end:139
+      // }
     ],
     name: "Bandit",
     head: "sprite/bandit_f.png",

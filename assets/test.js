@@ -7,8 +7,6 @@ cc.Class({
 
     extends: cc.Component,
 
-    properties: {},
-
     _world: null,
 
     onLoad: function () {
@@ -22,16 +20,12 @@ cc.Class({
         let pauseFunc = cc.game.pause.bind(cc.game);
         cc.game.pause=()=>{
             pauseFunc();
-            //do something
-            //cc.log("game pause");
             _world.pause();
         }
         //resume
         let resumeFunc = cc.game.resume.bind(cc.game);
         cc.game.resume=()=>{
             resumeFunc();
-            //do something
-            // cc.log("game resume");
             _world.resume();
         }
         // step实现，方便步进调试
@@ -46,17 +40,5 @@ cc.Class({
         // console.log(_world.hashGroups(['Position', 'Angle', ['Polygon', 'Circle']]));
         // console.log(_world.hashGroups(['Collider',['Circle','Polygon'],'Velocity']));
         // console.log("测试用例------");
-    },
-
-    start: function () {
-
-    },
-
-    onEnable: function () {
-
-    },
-
-    onDisable: function () {
-
     }
 });
