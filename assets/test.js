@@ -28,8 +28,12 @@ cc.Class({
             resumeFunc();
             _world.resume();
         }
-        // step实现，方便步进调试
-        
+        //step
+        let stepFunc = cc.game.step.bind(cc.game);
+        cc.game.step=()=>{
+            stepFunc();
+            _world.step();
+        }
 
         // 测试用例
         // console.log("测试用例------");

@@ -216,6 +216,15 @@ module.exports = {
                 }
             }
         });
+
+        // 调试输出tick
+        ecs.registerSystem({
+            name: 'tickDebug',
+            components: [],
+            beforeUpdate:function (dt, now, ecs) {
+                console.log(ecs.getTick());
+            }
+        });
         //
         ecs.setSpawner('Polygon',function (ecs, x, y, points) {
             let ent = ecs.createEntity();
@@ -250,12 +259,14 @@ module.exports = {
         //ecs.spawnEntity('Circle', 0, 0, 50);
 
         // 随机画N个圆和多边形
-        let size = 100;
+        let size = 50;
         for (let index = 0; index < size; index++) {
-            ecs.spawnEntity('Circle',Dice.rng(-300,300),Dice.rng(-300,300),Dice.rng(3,8),1);
+            if (index % 3 == 0) {
+                ecs.spawnEntity('Circle',Dice.rng(-300,300),Dice.rng(-300,300),Dice.rng(3,8),1);
+            }
             ecs.spawnEntity('Polygon',Dice.rng(-300,300),Dice.rng(-300,300),[[-4, -4], [4, -4], [4, 4], [-4, 4]],Dice.rng(0,3),1);
         }
         // 性能优化，会掉帧, 两个系统的帧不是一样的
-        console.log(cc.macro.BATCH_VERTEX_COUNT);
+        //console.log(cc.macro.BATCH_VERTEX_COUNT);
     }
 };

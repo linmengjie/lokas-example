@@ -2,7 +2,7 @@
 var configManager = {
     configs: [],
     init: function() {
-        cc.log("初始化配置文件管理器");
+        // cc.log("初始化配置文件管理器");
         this.configs["PropsConfig"] = require("PropsConfig");
         this.configs["ShootConfig"] = require("ShootConfig");
         this.configs["StageConfig"] = require("StageConfig");

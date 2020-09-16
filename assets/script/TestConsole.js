@@ -1,4 +1,4 @@
-cc.log("load TestConsole.");
+// cc.log("load TestConsole.");
 
 window.Test = {};
 Test.$ = function(name) {

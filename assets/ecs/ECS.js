@@ -1772,8 +1772,21 @@ pro.resume = function () {
     }
 };
 
+pro.step = function () {
+    if (this._paused) {
+        console.log("_world step");
+        this._timer.step();
+    }
+};
+
 pro.isPaused = function () {
     return this._paused;
 }
+
+// 状态，总运行时间，当前帧
+pro.getTick = function () {
+    return this._tick;
+}
+
 
 module.exports=ECS;

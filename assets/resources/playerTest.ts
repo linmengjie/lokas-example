@@ -5,7 +5,9 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-import ResLoader from "./script/ResLoader";
+import ResLoader from "../script/ResLoader";
+
+
 
 //import Logger from "./logger/Logger";
 
@@ -27,6 +29,10 @@ export default class playerTest extends cc.Component {
     spriteFrameList:cc.SpriteFrame[] = [];
 
     onLoad () {
+        // 停掉系统的动画播放
+        // cc.director.getScheduler().unscheduleAllForTarget(cc.director.getAnimationManager());
+        // TODO 使用ecs的动画播放
+        
         // 加载图集
         let self = this;
         //
@@ -97,22 +103,7 @@ export default class playerTest extends cc.Component {
             console.log(state);
 
 
-            // cc.director.getScheduler().unscheduleUpdate(cc.director.getActionManager());
-            // 停掉系统的动画播放
-            cc.director.getScheduler().unscheduleAllForTarget(cc.director.getAnimationManager());
-            // TODO 使用ecs的动画播放
-
-            console.log(cc.Scheduler.PRIORITY_SYSTEM, cc.Scheduler.PRIORITY_NON_SYSTEM);
-            // 
-            // let stepFunc = cc.game.step.bind(cc.game);
-            // cc.game.step=()=>{
-            //     console.log(state);
-            //     stepFunc();
-            //     // state.isPaused = false;
-            //     //state.update();
-            //     console.log("sss", state);
-            // }
-
+            // 画出碰撞区域，这应该在场景里显示才对了。
 
 
 

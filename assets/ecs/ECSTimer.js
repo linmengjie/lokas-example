@@ -1,6 +1,12 @@
 const async = require('async');
 const log = require('../logger/Logger');
 
+/**
+ * 
+ * @param {定时器频率，默认1000ms} updateTime 
+ * @param {*} timescale 
+ * @param {*} isAsync 
+ */
 let Timer = function (updateTime,timescale,isAsync) {
     this._timeScale = timescale||1.0;
     this.reset();
@@ -30,8 +36,17 @@ Timer.prototype.reset = function () {
 };
 
 Timer.prototype.TYPE = {
+    /**
+     * 同步
+     */
     SYNC:0,
+    /**
+     * 异步
+     */
     ASYNC:1,
+    /**
+     * 固定
+     */
     FIXED:2
 };
 
@@ -66,7 +81,7 @@ Timer.prototype.getSchedule = function (name) {
     return this._scheduleTasks[name];
 };
 //{name:name,time:time,task:function}
-Timer.prototype.schedule = function (name, task,interval, count ,delay, startTime) {
+Timer.prototype.schedule = function (name, task, interval, count ,delay, startTime) {
     delay = delay||0;
     if (this._scheduleTasks[name] ) {
         log.error('task name exists:'+name);
@@ -108,6 +123,11 @@ Timer.prototype.unscheduleAll = function () {
     this._scheduleTasks = [];
 };
 
+/**
+ * 重要方法
+ * @param {} interval 
+ * @param {*} now 
+ */
 Timer.prototype.activeSchedule = function (interval, now) {
     this.taskQueue = [];
     this.removeTasks = [];
@@ -169,6 +189,14 @@ Timer.prototype.pause = function () {
     this._onPause();
     this._stopTimer();
 };
+
+// 步进方法，自定义的，理解怎么控制匀速的
+Timer.prototype.step = function () {
+    if (this._interval) return;
+    this._prevInterval = this._updateTime;
+    // this._tick++;
+    this.instantUpdate();
+}
 
 Timer.prototype.resume = function () {
     if (this._interval) return;

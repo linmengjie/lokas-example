@@ -96,6 +96,11 @@ class System {
         return ret;
     }
 
+    /**
+     * 计算决定需要更新的系统
+     * @param {} sysUpdateTime 
+     * @param {*} now 
+     */
     calUpdate(sysUpdateTime,now) {
         if (!this.enabled) {
             return [];

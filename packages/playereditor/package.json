@@ -1,0 +1,22 @@
+{
+  "name": "playereditor",
+  "version": "0.0.1",
+  "description": "The package template for getting started.",
+  "author": "Cocos Creator",
+  "main": "main.js",
+  "main-menu": {
+    "i18n:MAIN_MENU.package.title/playereditor/open": {
+      "message": "playereditor:open"
+    },
+    "i18n:MAIN_MENU.package.title/playereditor/hello": {
+      "message": "playereditor:say-hello"
+    }
+  },
+  "panel": {
+    "main": "panel/index.js",
+    "type": "dockable",
+    "title": "playereditor",
+    "width": 400,
+    "height": 300
+  }
+}

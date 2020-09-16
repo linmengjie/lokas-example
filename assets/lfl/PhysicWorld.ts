@@ -4,6 +4,7 @@ import ShapeRendererSystem from "./ShapeRendererSystem";
 import Entity from "../ecs/Entity";
 import CCNodeComp from "./CCNodeComp";
 import SpriteComp from "./SpriteComp";
+import AnimationSystem from "./AnimationSystem";
 
 const {ccclass, property} = cc._decorator;
 //
@@ -38,6 +39,8 @@ module.exports = {
         ecs.registerComponent(CCNodeComp);
         ecs.registerComponent(SpriteComp);
         //ecs.registerSystem(MovingSystem);
+        
+        // ecs.registerSystem(AnimationSystem);
         ecs.registerSystem(ShapeRendererSystem);
 
 
